@@ -2,14 +2,14 @@ package com.jdbc.day1;
 
 import java.sql.*;
 
-public class InsertAndDeliteTest {
+public class insertAndDeleteTest {
 
-    static String URL = "jdbc:oracle:thin:@34.229.116.89:1521:xe"; // my server IP
+    static String URL = "jdbc:oracle:thin:@3.86.255.209:1521:xe"; // my server IP
     static String username = "hr";
     static String password = "hr";
 
     public static void main(String[] args) throws SQLException {
-        String INSERT_QUERY = "INSERT INTO employees VALUES (223, 'Hasan','Mammadov','hasan@cybertek.com','777-777-7777',SYSDATE,'SDET', 14999,0, NULL, NULL)";
+        String INSERT_QUERY = "INSERT INTO employees VALUES (115, 'Hasan','Mammadov','hasan@cybertek.com','777-777-7777',SYSDATE,'SDET', 14999,0, NULL, NULL)";
         String DELETE_QUERY = "DELETE FROM employees WHERE employee_id = 223";
 
         try (Connection connection = DriverManager.getConnection(URL, username, password);

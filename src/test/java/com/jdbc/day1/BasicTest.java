@@ -4,9 +4,10 @@ import java.sql.*;
 
 public class BasicTest {
 
+
     public static void main(String[] args) throws SQLException {
 
-        String URL = "jdbc:oracle:thin:@34.229.116.89:1521:xe"; // my server IP
+        String URL = "jdbc:oracle:thin:@3.86.255.209:1521:xe"; // my server IP
         String username = "hr";
         String password = "hr";
 
@@ -26,6 +27,7 @@ public class BasicTest {
             // get data from 2nd column for every row
             System.out.println(resultSet.getString(1) + " | " + resultSet.getString(2) + " | " + resultSet.getString(3));
         }
+
 
         resultSet.beforeFirst(); // to come back to the beginning of result set
         // some technical information about database

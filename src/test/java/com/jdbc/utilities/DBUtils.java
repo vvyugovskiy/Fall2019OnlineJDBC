@@ -7,10 +7,15 @@ import java.util.List;
 import java.util.Map;
 
 public class DBUtils {
-    private static Connection connection;
-    private static Statement statement;
-    private static ResultSet resultSet;
+    private static Connection connection; //connect with a database
+    private static Statement statement; //execute query
+    private static ResultSet resultSet; //store response/result set data
 
+    /**
+     * Performs connection with a database.
+     * Credentials already pre-set
+     * Throws exception in connection failed
+     */
     public static void createConnection() {
         String dbUrl = "jdbc:oracle:thin:@3.90.175.72:1521:xe";
         String dbUsername = "hr";
@@ -19,9 +24,18 @@ public class DBUtils {
             connection = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException("Failed to connect with a database!");
         }
     }
 
+    /**
+     * Performs connection with a database.
+     * Connection info is required! Usually, it stored in the configuration.properties
+     *
+     * @param DB_URL      jdbc:type://host:port/database
+     * @param DB_USERNAME like hr
+     * @param DB_PASSWORD like hr
+     */
     public static void createConnection(String DB_URL, String DB_USERNAME, String DB_PASSWORD) {
         try {
             connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
@@ -30,6 +44,10 @@ public class DBUtils {
             e.printStackTrace();
         }
     }
+
+    /**
+     * This method is called at the end of DB work, to close all connections.
+     */
     public static void destroy() {
         try {
             if (resultSet != null) {
@@ -43,6 +61,7 @@ public class DBUtils {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException("Failed to close database connection!");
         }
     }
     /**
@@ -55,6 +74,7 @@ public class DBUtils {
     public static Object getCellValue(String query) {
         return getQueryResultList(query).get(0).get(0);
     }
+
     /**
      *
      * @param query
@@ -168,6 +188,13 @@ public class DBUtils {
         }
         return columns;
     }
+
+    /**
+     * Method to execute query.
+     * Should be used only internally
+     *
+     * @param query to execute
+     */
     private static void executeQuery(String query) {
         try {
             statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -182,6 +209,27 @@ public class DBUtils {
             e.printStackTrace();
         }
     }
+
+    /**
+     * /**
+     * Executes the given SQL statement, which may be an <code>INSERT</code>,
+     * <code>UPDATE</code>, or <code>DELETE</code> statement or an
+     * SQL statement that returns nothing, such as an SQL DDL statement.
+     *
+     * @param query
+     * @return either (1) the row count for SQL Data Manipulation Language (DML) statements
+     * *      *         or (2) 0 for SQL statements that return nothing
+     */
+    public static int executeUpdate(String query) {
+        try {
+            statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            return statement.executeUpdate(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to execute update operation!");
+        }
+    }
+
     public static int getRowCount() throws Exception {
         resultSet.last();
         int rowCount = resultSet.getRow();
